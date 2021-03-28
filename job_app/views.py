@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import render
 from django.http import HttpResponse
 from job_app.models import Vacancy, Specialty, Company
@@ -11,7 +12,9 @@ from job_app.models import Vacancy, Specialty, Company
 """
 
 def main_view(request):
-    return render(request, "week3/index.html", context={})
+    specialties = Specialty.objects.annotate(num_vacancies=Count('vacancies'))
+    companies = Company.objects.annotate(num_vacancies=Count('vacancies'))
+    return render(request, "week3/index.html", context={"specialties": specialties, "companies": companies,})
 
 
 def vacancies_view(request):
