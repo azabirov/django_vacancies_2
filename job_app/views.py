@@ -30,8 +30,7 @@ def company_view(request, company):
         company = Company.objects.get(id=company)
     except Company.DoesNotExist:
         raise Http404
-
-    return render(request, "week3/company.html", context={"company": company, "vacancies": vacancies,})
+    return render(request, "week3/company.html", context={"company": company})
 
 
 def vacancy_view(request, vacancy):
