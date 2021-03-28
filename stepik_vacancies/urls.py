@@ -38,7 +38,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_view, name="main"),
     path('vacancies/', vacancies_view, name="vacancies"),
-    path('vacancies/cat/<str:specialty>/', specialty_vacancies_view, name="specialty_vacancies"),
+    path('vacancies/cat/<str:specialty_>/', specialty_vacancies_view, name="specialty_vacancies"),
     path('companies/<int:company>/', company_view, name="company"),
     path('vacancies/<int:vacancy>/', vacancy_view, name="vacancy"),
 ]

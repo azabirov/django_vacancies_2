@@ -18,11 +18,17 @@ def main_view(request):
 
 
 def vacancies_view(request):
-    return render(request, "week3/vacancies.html", context={})
+    vacancies = Vacancy.objects.all()
+    return render(request, "week3/vacancies.html", context={"vacancies":vacancies})
 
 
-def specialty_vacancies_view(request, specialty):
-    return render(request, "week3/vacancies.html", context={})
+def specialty_vacancies_view(request, specialty_):
+    try:
+        #company = Specialty.objects.filter(title=specialty_)
+        vacancy = Vacancy.objects.filter(specialty=Specialty.objects.get(code=specialty_))
+    except Specialty.DoesNotExist:
+        raise Http404
+    return render(request, "week3/vacancies.html", context={"vacancy":vacancy})
 
 
 def company_view(request, company):
@@ -34,7 +40,11 @@ def company_view(request, company):
 
 
 def vacancy_view(request, vacancy):
-    return render(request, "week3/vacancy.html", context={})
+    try:
+        vacancy = Vacancy.objects.get(id=vacancy)
+    except Vacancy.DoesNotExist:
+        raise Http404
+    return render(request, "week3/vacancy.html", context={"vacancy":vacancy})
 
 
 def custom_handler500(request, *args, **kwargs):
