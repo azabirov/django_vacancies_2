@@ -1,6 +1,6 @@
 from django.db.models import Count
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from job_app.models import Vacancy, Specialty, Company
 # Create your views here.
 """
@@ -26,7 +26,12 @@ def specialty_vacancies_view(request, specialty):
 
 
 def company_view(request, company):
-    return render(request, "week3/company.html", context={})
+    try:
+        company = Company.objects.get(id=company)
+    except Company.DoesNotExist:
+        raise Http404
+
+    return render(request, "week3/company.html", context={"company": company, "vacancies": vacancies,})
 
 
 def vacancy_view(request, vacancy):
