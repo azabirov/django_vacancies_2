@@ -13,6 +13,7 @@ class Company(models.Model):
     def __str__(self):
         return self.name
 
+
 class Specialty(models.Model):
     code = models.CharField(max_length=32)
     title = models.CharField(max_length=120)
@@ -20,6 +21,7 @@ class Specialty(models.Model):
 
     def __str__(self):
         return self.code
+
 
 class Vacancy(models.Model):
     title = models.CharField(max_length=120)

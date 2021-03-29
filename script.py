@@ -1,4 +1,4 @@
-'''
+"""
 import os
 import django
 
@@ -37,4 +37,4 @@ if __name__ == '__main__':
             salary_max=job["salary_to"],
             published_at=job["posted"],
         )
-'''
+"""
