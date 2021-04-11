@@ -1,14 +1,14 @@
-from django.db.models import Count
 from django.contrib import auth
-from django.contrib.auth import logout
-from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, Http404
-from django.views.generic import View, CreateView
-from django.contrib.auth.views import LoginView
 from django.contrib import messages
-from job_app.models import Vacancy, Specialty, Company, Application
+from django.contrib.auth import login, logout
+from django.contrib.auth.models import User
+from django.db.models import Count
+from django.http import HttpResponse, Http404
+from django.shortcuts import render, redirect
+from django.views.generic import View, CreateView
+
 from job_app.forms import RegistrationForm, LoginForm, ApplicationForm, CompanyForm, VacancyForm
+from job_app.models import Vacancy, Specialty, Company, Application
 
 # Create your views here.
 """
@@ -30,15 +30,6 @@ from job_app.forms import RegistrationForm, LoginForm, ApplicationForm, CompanyF
 – Вход /login
 – Регистрация /register
 – Выход /logout
-"""
-
-"""
-class MainView(View):
-    @staticmethod
-    def get(self, request):
-        specialties = Specialty.objects.annotate(count=Count('vacancies'))
-        companies = Company.objects.annotate(num_vacancies=Count('vacancies'))
-        return render(request, "week3/index.html", context={"specialties": specialties, "companies": companies})
 """
 
 
@@ -103,6 +94,9 @@ class VacancySendView(View):
 
 class CompanyLetsStart(View):
     def get(self, request):
+        user = auth.get_user(request)
+        if user.is_authenticated:
+            return redirect('mycompanyedit')
         return render(request, "week3/company-create.html")
 
 
@@ -110,7 +104,8 @@ class MyCompanyView(View):
     def get(self, request):
         user = auth.get_user(request)
         if Company.objects.filter(owner_id=user.id):
-            return redirect('mycompanyedit')
+            company = Company.objects.get(owner_id=user.id).id
+            return redirect('company', company)
         return redirect('letsstart')
 
 
@@ -145,6 +140,18 @@ class MyCompanyEdit(View):
             company_form.save()
             return redirect('/mycompany/edit/')
         return render(request, 'week3/company-edit.html', context={'form': company_form, 'company': company})
+
+
+class MyCompanyCreate(View):
+    def get(self, request):
+        user = auth.get_user(request)
+        company = None
+        companyform = CompanyForm()
+        if user.is_authenticated:
+            if Company.objects.filter(owner_id=user.id):
+                raise Http404
+            else:
+                return render(request, 'week3/company-edit.html', context={'form': companyform, 'company': company})
 
 
 class MyVacancyEditView(View):
@@ -194,12 +201,6 @@ class MyVacanciesCreateView(View):
         return render(request, 'week4/vacancy-create.html')
 
 
-class MyLoginView(LoginView):
-    redirect_authenticated_user = True
-    template_name = "week4/login.html"
-    extra_context = {"form": LoginForm}
-
-
 class RegisterView(CreateView):
     form_class = RegistrationForm
     model = User
@@ -218,6 +219,16 @@ class LogoutView(View):
     def get(request):
         logout(request)
         return redirect("main")
+
+
+def login_view(request):
+    form = LoginForm(request.POST or None)
+    if request.POST and form.is_valid():
+        user = form.login(request)
+        if user:
+            login(request, user)
+            return redirect("main")
+    return render(request, 'week4/login.html', {'form': form})
 
 
 def custom_handler500(request, *args, **kwargs):

@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from job_app.views import (
                            MainView,
-                           MyLoginView,
+                           login_view,
                            LogoutView,
                            RegisterView,
                            VacanciesView,
@@ -29,6 +29,7 @@ from job_app.views import (
                            VacancySendView,
                            CompanyLetsStart,
                            MyCompanyView,
+                           MyCompanyCreate,
                            MyCompanyEdit,
                            MyVacanciesView,
                            MyVacanciesCreateView,
@@ -51,7 +52,7 @@ handler500 = custom_handler500
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', MainView.as_view(), name="main"),
-    path('login/', MyLoginView.as_view(), name="login"),
+    path('login/', login_view, name="login"),
     path('logout/', LogoutView.as_view(), name="logout"),
     path('register/', RegisterView.as_view(), name="register"),
     path('vacancies/', VacanciesView.as_view(), name="vacancies"),
@@ -61,7 +62,8 @@ urlpatterns = [
     path('vacancies/<int:vacancy>/send/', VacancySendView.as_view(), name="sent"),
     path('mycompany/letsstart/', CompanyLetsStart.as_view(), name="letsstart"),
     path('mycompany/', login_required(MyCompanyView.as_view()), name="mycompany"),
-    path('mycompany/edit/', MyCompanyEdit.as_view(), name='mycompanyedit'),
+    path('mycompany/create/', login_required(MyCompanyCreate.as_view()), name='mycompanycreate'),
+    path('mycompany/edit/', login_required(MyCompanyEdit.as_view()), name='mycompanyedit'),
     path('mycompany/vacancies/', login_required(MyVacanciesView.as_view()), name='myvacancies'),
     path('mycompany/vacancies/create/', login_required(MyVacanciesCreateView.as_view()), name='myvacanciescreate'),
     path('mycompany/vacancies/edit/', login_required(MyVacancyEditView.as_view()), name='myvacancyedit'),

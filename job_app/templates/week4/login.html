@@ -14,14 +14,27 @@
       </div>
     <div class="row">
       <div class="col-8 col-lg-4 offset-2 offset-lg-4">
-
             <form class="form-signin pt-5" enctype="multipart/form-data" action="" method="post">
                 <div class="text-center mt-5 b-1">
                     <h1 class="h3 mb-3 font-weight-normal">Работа для программистов</h1>
                     <p class="h5 font-weight-light">Войдите, чтобы управлять</p>
-                    {% for error in form.non_field_errors %}
-                        <span class="error-message "><span style="color: red; ">{{ error }}</span></span>
-                    {% endfor %}
+                    {% if form.errors %}
+                        <div class="alert alert-error">
+                            <h4>Неверный логин или пароль</h4>
+                            <ul>
+                                {% for field in form %}
+                                    {% if field.errors %}
+                                        {% for error in field.errors %}
+                                            <li><a href="#id_{{ field.name }}" class="error">{{ error|escape }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            {% if form.non_field_errors %}
+                                {{ form.non_field_errors }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 </div>
                 {% csrf_token %}
                 {% for field in form %}

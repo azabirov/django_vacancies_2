@@ -1,7 +1,9 @@
 from django import forms
-from django.forms import ModelForm, TextInput, Textarea
-from job_app.models import Application, Company, Vacancy
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.forms import ModelForm, TextInput, Textarea
+
+from job_app.models import Application, Company, Vacancy
 
 
 class RegistrationForm(forms.ModelForm):
@@ -22,6 +24,20 @@ class LoginForm(forms.ModelForm):
 
     username = forms.CharField(label='Логин', widget=TextInput)
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        if not user or not user.is_active:
+            raise forms.ValidationError("Sorry, that login was invalid. Please try again.")
+        return self.cleaned_data
+
+    def login(self, request):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        return user
 
 
 class ApplicationForm(ModelForm):
