@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-STATIC_ROOT = 'static'
+STATIC_ROOT = 'job_app/static'
 
 # Application definition
 
