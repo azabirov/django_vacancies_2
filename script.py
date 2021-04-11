@@ -45,7 +45,7 @@ from data import jobs, companies, specialties
 from job_app.models import Vacancy, Company, Specialty
 
 if __name__ == '__main__':
-    for company in companies:
+    for specialty in specialties:
         state = Company.objects.update(
             owner=User.objects.get(id=1),
         )
