@@ -147,11 +147,10 @@ class MyCompanyCreate(View):
         user = auth.get_user(request)
         company = None
         companyform = CompanyForm()
-        if user.is_authenticated:
-            if Company.objects.filter(owner_id=user.id):
-                raise Http404
-            else:
-                return render(request, 'week3/company-edit.html', context={'form': companyform, 'company': company})
+        if Company.objects.filter(owner_id=user.id):
+            raise Http404
+        else:
+            return render(request, 'week3/company-edit.html', context={'form': companyform, 'company': company})
 
 
 class MyVacancyEditView(View):
@@ -183,13 +182,10 @@ class MyVacancy(View):
 class MyVacanciesView(View):
     def get(self, request):
         user = auth.get_user(request)
-        if request.user.is_authenticated:
-            jobs = Vacancy.objects.filter(company__owner__id=user.id).annotate(application_count=Count('applications'))
-            if not jobs:
-                return redirect('myvacanciescreate')
-            return render(request, 'week4/vacancy-list.html', context={'vacancies': jobs})
-        else:
-            raise Http404
+        jobs = Vacancy.objects.filter(company__owner__id=user.id).annotate(application_count=Count('applications'))
+        if not jobs:
+            return redirect('myvacanciescreate')
+        return render(request, 'week4/vacancy-list.html', context={'vacancies': jobs})
 
 
 class MyVacanciesCreateView(View):
