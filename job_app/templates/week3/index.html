@@ -31,7 +31,7 @@
           {% for speciality in specialties|slice:":4"  %}
         <div class="col-6 col-md-6 col-lg-3">
           <div class="card pt-4 text-center mb-4">
-            <img class="mx-auto d-block" src="https://place-hold.it/80x80" width="80" height="80" alt="">
+            <img class="mx-auto d-block" src="static/specialties/specty_{{ speciality.code }}.png" width="80" height="80" alt="">
             <div class="card-body">
               <p class="card-text mb-2">{{ speciality.title }}</p>
               <p class="card-text"><a href={% url 'specialty_vacancies' speciality.code %}>{{ speciality.vacancies.count }} вакансий</a></p>
@@ -44,7 +44,7 @@
           {% for speciality in specialties|slice:"4:"  %}
         <div class="col-6 col-md-6 col-lg-3">
           <div class="card pt-4 text-center mb-4">
-            <img class="mx-auto d-block" src="https://place-hold.it/80x80" width="80" height="80" alt="">
+            <img class="mx-auto d-block" src="static/specialties/specty_{{ speciality.code }}.png" width="80" height="80" alt="">
             <div class="card-body">
               <p class="card-text mb-2">{{ speciality.title }}</p>
               <p class="card-text"><a href={% url 'specialty_vacancies' speciality.code %}>{{ speciality.vacancies.count }} вакансий</a></p>
@@ -62,7 +62,7 @@
                   <div class="col-6 col-md-6 col-lg-3">
                       <div class="card pt-4 text-center mb-4">
                           <a href="#" style="max-width: 150px;" class="mx-auto d-block">
-                              <img class="mx-auto d-block mw-100" src="../static/{{ company.logo }}" alt=""> </a>
+                              <img class="mx-auto d-block mw-100" src="{{ company.logo.url }}" alt=""> </a>
                           <div class="card-body">
                               <p class="card-text"><a href="{% url 'company' company.id %}">
                                   {{ company.num_vacancies }} вакансий</a></p>
@@ -76,7 +76,7 @@
                   <div class="col-6 col-md-6 col-lg-3">
                       <div class="card pt-5 text-center mb-4">
                           <a href="#" style="max-width: 150px;" class="mx-auto d-block">
-                              <img class="mx-auto d-block mw-100" src="../static/{{ company.logo }}" width="150"
+                              <img class="mx-auto d-block mw-100" src="{{ company.logo.url }}" width="150"
                                    height="80" alt=""></a>
                           <div class="card-body">
                               <p class="card-text"><a href="{% url 'company' company.id %}">

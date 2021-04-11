@@ -15,11 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth.decorators import login_required
 from job_app.views import (
-                           main_view,
-                           vacancies_view,
-                           specialty_vacancies_view,
-                           company_view, vacancy_view,
+                           MainView,
+                           MyLoginView,
+                           LogoutView,
+                           RegisterView,
+                           VacanciesView,
+                           SpecialtyVacanciesView,
+                           CompanyView, VacancyView,
+                           VacancySendView,
+                           CompanyLetsStart,
+                           MyCompanyView,
+                           MyCompanyEdit,
+                           MyVacanciesView,
+                           MyVacanciesCreateView,
+                           MyVacancyEditView,
+                           MyVacancy,
                            custom_handler404,
                            custom_handler500,
                            )
@@ -36,9 +50,24 @@ handler500 = custom_handler500
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main_view, name="main"),
-    path('vacancies/', vacancies_view, name="vacancies"),
-    path('vacancies/cat/<str:specialty_>/', specialty_vacancies_view, name="specialty_vacancies"),
-    path('companies/<int:company>/', company_view, name="company"),
-    path('vacancies/<int:vacancy>/', vacancy_view, name="vacancy"),
+    path('', MainView.as_view(), name="main"),
+    path('login/', MyLoginView.as_view(), name="login"),
+    path('logout/', LogoutView.as_view(), name="logout"),
+    path('register/', RegisterView.as_view(), name="register"),
+    path('vacancies/', VacanciesView.as_view(), name="vacancies"),
+    path('vacancies/cat/<str:specialty_>/', SpecialtyVacanciesView.as_view(), name="specialty_vacancies"),
+    path('companies/<int:company>/', CompanyView.as_view(), name="company"),
+    path('vacancies/<int:vacancy>/', VacancyView.as_view(), name="vacancy"),
+    path('vacancies/<int:vacancy>/send/', VacancySendView.as_view(), name="sent"),
+    path('mycompany/letsstart/', CompanyLetsStart.as_view(), name="letsstart"),
+    path('mycompany/', login_required(MyCompanyView.as_view()), name="mycompany"),
+    path('mycompany/edit/', MyCompanyEdit.as_view(), name='mycompanyedit'),
+    path('mycompany/vacancies/', login_required(MyVacanciesView.as_view()), name='myvacancies'),
+    path('mycompany/vacancies/create/', login_required(MyVacanciesCreateView.as_view()), name='myvacanciescreate'),
+    path('mycompany/vacancies/edit/', login_required(MyVacancyEditView.as_view()), name='myvacancyedit'),
+    path('mycompany/vacancies/<int:vacancy>/', login_required(MyVacancy.as_view()), name='myvacancy'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
