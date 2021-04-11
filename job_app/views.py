@@ -81,9 +81,13 @@ class VacancyView(View):
             written_cover_letter = application_form.cleaned_data.get('written_cover_letter')
             user = request.user.id
             if user:
-                Application.objects.create(written_username=written_username, written_phone=written_phone,
-                                           written_cover_letter=written_cover_letter, user_id=user,
-                                           vacancy=Vacancy.objects.get(id=vacancy))
+                Application.objects.create(
+                                           written_username=written_username,
+                                           written_phone=written_phone,
+                                           written_cover_letter=written_cover_letter,
+                                           user_id=user,
+                                           vacancy=Vacancy.objects.get(id=vacancy),
+                                           )
             else:
                 return redirect('login')
             return redirect('sent', vacancy)
