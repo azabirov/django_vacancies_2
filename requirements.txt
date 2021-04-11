@@ -43,4 +43,3 @@ stdlib-list==0.8.0
 toml==0.10.2
 typing-extensions==3.7.4.3
 zipp==3.4.1
-crispy_forms
