@@ -37,6 +37,7 @@
                     {% endif %}
                 </div>
                 {% csrf_token %}
+                {% csrf_token %}
                 {% for field in form %}
                     <div class="mt-5 form-label-group">
                         <p class="text-muted">{{ field.label }}</p>

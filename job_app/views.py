@@ -101,7 +101,7 @@ class VacancySendView(View):
 class CompanyLetsStart(View):
     def get(self, request):
         user = auth.get_user(request)
-        if user.is_authenticated:
+        if Company.objects.filter(owner_id=user.id):
             return redirect('mycompanyedit')
         return render(request, "week3/company-create.html")
 
@@ -144,7 +144,7 @@ class MyCompanyEdit(View):
             company_form.save(commit=False)
             company_form.instance.owner = request.user
             company_form.save()
-            return redirect('/mycompany/edit/')
+            return redirect('mycompanyedit')
         return render(request, 'week3/company-edit.html', context={'form': company_form, 'company': company})
 
 
@@ -235,13 +235,11 @@ def login_view(request):
 
 def custom_handler500(request, *args, **kwargs):
     return HttpResponse(
-        "<h2>500 ERROR - Server error.</h2><p>We wish you at least some level of patience.</p>",
+        "{% extends 'week3/base.html' %}<h2>500 ERROR - Server error.</h2><p>We wish you at least some level of "
+        "patience.</p>{% endblock %}",
         status=500,
     )
 
 
 def custom_handler404(request, *args, **kwargs):
-    return HttpResponse(
-        "<h2>404 ERROR - No such page.</h2><p>Oops! Try logging in or typing different path.</p>",
-        status=404,
-    )
+    return render(request, '404.html')

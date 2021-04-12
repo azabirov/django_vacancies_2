@@ -13,6 +13,14 @@
             <p class="text-center pt-1">Компания, {{ company.location }},
                 {{ company.employee_count }} сотрудников,
                 {{ company.vacancies.all|length }} вакансии</p>
+            {% if company.owner_id == request.user.id %}
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <form action="{% url 'mycompanyedit' %}" method="get" class="w-25">
+                            <button type="submit" class="btn btn-primary btn-block">Редактировать</button>
+                        </form>
+                    </div> </div>
+            {% endif %}
             <div class="row mt-5">
                 <div class="col-12 col-lg-8 offset-lg-2 m-auto">
                     {% for vacancy in company.vacancies.all %}
@@ -26,7 +34,7 @@
                                         <p class="text-muted pt-1">{{ vacancy.published_at }}</p>
                                     </div>
                                     <div class="col-12 col-md-4 col-lg-3 d-flex align-items-end">
-                                        <img src="https://place-hold.it/130x80" width="130" height="80" alt="">
+                                        <img src="{{ company.logo.url }}" width="130" height="80" alt="">
                                     </div>
                                 </div>
                             </div>
