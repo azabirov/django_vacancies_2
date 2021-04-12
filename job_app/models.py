@@ -62,3 +62,19 @@ class Application(models.Model):
 
     def __str__(self):
         return self.written_username
+
+
+class Resume(models.Model):
+    name = models.CharField(max_length=20)
+    surname = models.CharField(max_length=40)
+    status = models.CharField(max_length=30)
+    salary = models.CharField(max_length=8)
+    specialty = models.CharField(max_length=64)
+    grade = models.CharField(max_length=64)
+    education = models.CharField(max_length=64)
+    experience = models.CharField(max_length=64)
+    portfolio = models.CharField(max_length=300)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resume_owner', null=True, blank=True)
+
+    def __str__(self):
+        return self.name

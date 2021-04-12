@@ -19,25 +19,25 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from job_app.views import (
-                           MainView,
-                           login_view,
-                           LogoutView,
-                           RegisterView,
-                           VacanciesView,
-                           SpecialtyVacanciesView,
-                           CompanyView, VacancyView,
-                           VacancySendView,
-                           CompanyLetsStart,
-                           MyCompanyView,
-                           MyCompanyCreate,
-                           MyCompanyEdit,
-                           MyVacanciesView,
-                           MyVacanciesCreateView,
-                           MyVacancyEditView,
-                           MyVacancy,
-                           custom_handler404,
-                           custom_handler500,
-                           )
+    MainView,
+    login_view,
+    LogoutView,
+    RegisterView,
+    VacanciesView,
+    SpecialtyVacanciesView,
+    CompanyView, VacancyView,
+    VacancySendView,
+    CompanyLetsStart,
+    MyCompanyView,
+    MyCompanyCreate,
+    MyCompanyEdit,
+    MyVacanciesView,
+    MyVacanciesCreateView,
+    MyVacancyEditView,
+    MyVacancy,
+    custom_handler404,
+    custom_handler500, MyResumeLetsStart, MyResumeCreateView, MyResumeEditView,
+)
 """
 – Главная  /
 – Все вакансии списком   /vacancies
@@ -68,6 +68,10 @@ urlpatterns = [
     path('mycompany/vacancies/create/', login_required(MyVacanciesCreateView.as_view()), name='myvacanciescreate'),
     path('mycompany/vacancies/edit/', login_required(MyVacancyEditView.as_view()), name='myvacancyedit'),
     path('mycompany/vacancies/<int:vacancy>/', login_required(MyVacancy.as_view()), name='myvacancy'),
+    path('myresume/letsstart', login_required(MyResumeLetsStart.as_view()), name='resumeletsstart'),
+    path('myresume/create', login_required(MyResumeCreateView.as_view()), name='myresumecreate'),
+    path('myresume/edit', login_required(MyResumeEditView.as_view()), name='myresumeedit'),
+    path('myresume', login_required(MyResumeEditView.as_view()), name='myresume'),
 ]
 
 if settings.DEBUG:

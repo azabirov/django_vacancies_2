@@ -7,8 +7,8 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.views.generic import View, CreateView
 
-from job_app.forms import RegistrationForm, LoginForm, ApplicationForm, CompanyForm, VacancyForm
-from job_app.models import Vacancy, Specialty, Company, Application
+from job_app.forms import RegistrationForm, LoginForm, ApplicationForm, CompanyForm, VacancyForm, ResumeForm
+from job_app.models import Vacancy, Specialty, Company, Application, Resume
 
 """
 – Главная  /
@@ -122,13 +122,11 @@ class MyCompanyEdit(View):
         user = auth.get_user(request)
         company = None
         companyform = CompanyForm()
-        if user.is_authenticated:
-            if Company.objects.filter(owner_id=user.id):
-                company = Company.objects.get(owner_id=user.id)
-                companyform = CompanyForm(instance=company)
-            return render(request, 'week3/company-edit.html', context={'form': companyform, 'company': company})
-        else:
-            return redirect('main')
+        if Company.objects.filter(owner_id=user.id):
+            company = Company.objects.get(owner_id=user.id)
+            companyform = CompanyForm(instance=company)
+        return render(request, 'week3/company-edit.html', context={'form': companyform, 'company': company})
+
 
     def post(self, request):
         user = auth.get_user(request)
@@ -203,6 +201,51 @@ class MyVacanciesCreateView(View):
         return render(request, 'week4/vacancy-create.html')
 
 
+class MyResumeLetsStart(View):
+    def get(self, request):
+        user = auth.get_user(request)
+        if Resume.objects.filter(owner_id=user.id):
+            return redirect('myresume')
+        return render(request, "week4/resume-create.html")
+
+
+class MyResumeEditView(View):
+    success_message = "Резюме обновлено"
+
+    def get(self, request):
+        user = auth.get_user(request)
+        resume = None
+        resumeform = ResumeForm()
+        if Resume.objects.filter(owner_id=user.id):
+            resume = Resume.objects.get(owner_id=user.id)
+            resumeform = ResumeForm(instance=resume)
+        return render(request, 'week4/resume-edit.html', context={'form': resumeform, 'resume': resume})
+
+    def post(self, request):
+        user = auth.get_user(request)
+        messages.success(self.request, self.success_message)
+        if Resume.objects.filter(owner_id=user.id):
+            resume = Resume.objects.get(owner_id=user.id)
+            resume_form = ResumeForm(request.POST, instance=resume)
+        else:
+            resume = None
+            resume_form = ResumeForm(request.POST)
+        if resume_form.is_valid():
+            resume_form.save(commit=False)
+            resume_form.instance.owner = request.user
+            resume_form.save()
+            return redirect('myresumeedit')
+        return render(request, 'week4/resume-edit.html', context={'form': resume_form, 'resume': resume})
+
+
+class MyResumeCreateView(View):
+    def get(self, request):
+        user = auth.get_user(request)
+        if Resume.objects.filter(owner_id=user.id):
+            raise Http404
+        else:
+            return redirect('myresumeedit')
+
 class RegisterView(CreateView):
     form_class = RegistrationForm
     model = User
@@ -235,8 +278,8 @@ def login_view(request):
 
 def custom_handler500(request, *args, **kwargs):
     return HttpResponse(
-        "{% extends 'week3/base.html' %}<h2>500 ERROR - Server error.</h2><p>We wish you at least some level of "
-        "patience.</p>{% endblock %}",
+        "<h2>500 ERROR - Server error.</h2><p>We wish you at least some level of "
+        "patience.</p>",
         status=500,
     )
 

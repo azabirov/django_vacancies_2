@@ -4,7 +4,21 @@ from django.contrib.auth.forms import UsernameField
 from django.contrib.auth.models import User
 from django.forms import ModelForm, TextInput, Textarea
 
-from job_app.models import Application, Company, Vacancy
+from job_app.models import Application, Company, Vacancy, Resume
+
+CHOICES_STATUS = [('1', 'Ищу работу'), ('2', 'Рассматриваю предложения'), ('3', 'Не ищу работу')]
+CHOICES_SPECIALTY = [
+                    ('1', 'Backend developer'),
+                    ('2', 'Frontend developer'),
+                    ('3', 'Designer'),
+                    ('3', 'Tester'),
+                    ]
+CHOICES_GRADE = [
+                ('1', 'Trainee'),
+                ('2', 'Junior'),
+                ('3', 'Middle'),
+                ('4', 'Senior'),
+                ]
 
 
 class RegistrationForm(forms.ModelForm):
@@ -82,4 +96,21 @@ class VacancyForm(forms.ModelForm):
             'salary_max': forms.TextInput(attrs={'class': 'form-control'}),
             'skills': forms.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': '4'}),
+        }
+
+
+class ResumeForm(forms.ModelForm):
+    class Meta:
+        model = Resume
+        fields = ('name', 'surname', 'status', 'salary', 'specialty', 'grade', 'education', 'experience', 'portfolio')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'surname': forms.TextInput(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'custom-select mr-sm-2'}, choices=CHOICES_STATUS),
+            'salary': forms.TextInput(attrs={'class': 'form-control'}),
+            'specialty': forms.Select(attrs={'class': 'custom-select mr-sm-2'}, choices=CHOICES_SPECIALTY),
+            'grade': forms.Select(attrs={'class': 'custom-select mr-sm-2'}, choices=CHOICES_GRADE),
+            'education': forms.TextInput(attrs={'class': 'form-control'}),
+            'experience': forms.Textarea(attrs={'class': 'form-control'}),
+            'portfolio': forms.TextInput(attrs={'class': 'form-control'}),
         }

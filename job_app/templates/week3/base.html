@@ -27,7 +27,7 @@
             {% if request.user.is_authenticated %}
               <button type="button" class="btn dropdown-toggle font-weight-bold" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.first_name }} {{ user.last_name }}</button>
               <div class="dropdown-menu dropdown-menu-right mt-3">
-                 <a href="#" class="dropdown-item py-2">Резюме</a>
+                 <a href="{% url 'resumeletsstart' %}" class="dropdown-item py-2">Резюме</a>
                  <a href="{% url 'mycompany' %}" class="dropdown-item py-2">Компания</a>
                  <a href="{% url 'logout' %}" class="dropdown-item py-2">Выйти</a>
             {% else %}
