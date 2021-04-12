@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import UsernameField
 from django.contrib.auth.models import User
 from django.forms import ModelForm, TextInput, Textarea
 
@@ -10,34 +11,40 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'password')
+        field_classes = {'username': UsernameField}
 
-    first_name = forms.CharField(label='Имя', widget=TextInput(attrs={'class': 'form-control'}))
-    last_name = forms.CharField(label='Фамилия', widget=TextInput(attrs={'class': 'form-control'}))
     username = forms.CharField(label='Логин', widget=TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    first_name = forms.CharField(label='Имя', widget=TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(label='Фамилия', widget=TextInput(attrs={'class': 'form-control'}))
 
 
 class LoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password')
-
-    username = forms.CharField(label='Логин', widget=TextInput)
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-
-    def clean(self):
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
-        if not user or not user.is_active:
-            raise forms.ValidationError("Sorry, that login was invalid. Please try again.")
-        return self.cleaned_data
+        field_classes = {'username': UsernameField}
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+        }
 
     def login(self, request):
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
         user = authenticate(username=username, password=password)
         return user
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        if not user or not user.is_active:
+            raise forms.ValidationError("Исправьте логин или пароль и попробуйте снова.")
+        return self.cleaned_data
+
+    username = forms.CharField(label='Логин', widget=TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 
 class ApplicationForm(ModelForm):

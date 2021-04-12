@@ -10,7 +10,6 @@ from django.views.generic import View, CreateView
 from job_app.forms import RegistrationForm, LoginForm, ApplicationForm, CompanyForm, VacancyForm
 from job_app.models import Vacancy, Specialty, Company, Application
 
-# Create your views here.
 """
 – Главная  /
 – Все вакансии списком   /vacancies
