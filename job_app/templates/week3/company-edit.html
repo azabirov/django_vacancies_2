@@ -38,13 +38,6 @@
                                         <div class="form-group">
                                             <label class="mb-2 text-dark" for="logo">Логотип</label>
                                             <div class="row align-items-center">
-                                                {% if company.logo %}
-                                                    <div class="col-6">
-                                                        <img src="{{ company.logo.url }}" alt="" style="max-width: 120px;height: auto;">
-                                                    </div>
-                                                {% else %}
-                                                    <p></p>
-                                                {% endif %}
                                                 <div class="col-6" style="position: relative;">
                                                     <div class="input-group-prepend" style="position: absolute; top: 0;right: 15px;">
                                                         <span class="btn btn-info px-4">Загрузить</span>
@@ -53,6 +46,13 @@
                                                         {{ form.logo }}
                                                     </div>
                                                 </div>
+                                                {% if company.logo %}
+                                                    <div class="col-6">
+                                                        <img src="{{ company.logo.url }}" alt="" style="max-width: 120px;height: auto;">
+                                                    </div>
+                                                {% else %}
+                                                    <p></p>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
