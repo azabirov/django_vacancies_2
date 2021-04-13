@@ -2,10 +2,10 @@ from django.contrib import auth
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
-from django.views.generic import View, CreateView
+from django.views.generic import View, CreateView, ListView
 
 from job_app.forms import RegistrationForm, LoginForm, ApplicationForm, CompanyForm, VacancyForm, ResumeForm
 from job_app.models import Vacancy, Specialty, Company, Application, Resume
@@ -246,10 +246,11 @@ class MyResumeCreateView(View):
         else:
             return redirect('myresumeedit')
 
+
 class RegisterView(CreateView):
     form_class = RegistrationForm
     model = User
-    success_url = 'login'
+    success_url = "login"
     template_name = "week4/register.html"
 
     def form_valid(self, form):
@@ -257,6 +258,17 @@ class RegisterView(CreateView):
         user.set_password(form.cleaned_data['password'])
         user.save()
         return redirect('/login/')
+
+
+class SearchView(ListView):
+    model = Vacancy
+    template_name = "week4/search.html"
+
+    def get_queryset(self):
+        request = self.request.GET.get('s')
+        return Vacancy.objects.filter(
+            Q(title__icontains=request) | Q(description__icontains=request) | Q(skills__icontains=request)
+        )
 
 
 class LogoutView(View):

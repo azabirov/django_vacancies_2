@@ -36,7 +36,7 @@ from job_app.views import (
     MyVacancyEditView,
     MyVacancy,
     custom_handler404,
-    custom_handler500, MyResumeLetsStart, MyResumeCreateView, MyResumeEditView,
+    custom_handler500, MyResumeLetsStart, MyResumeCreateView, MyResumeEditView, SearchView,
 )
 """
 – Главная  /
@@ -72,6 +72,7 @@ urlpatterns = [
     path('myresume/create', login_required(MyResumeCreateView.as_view()), name='myresumecreate'),
     path('myresume/edit', login_required(MyResumeEditView.as_view()), name='myresumeedit'),
     path('myresume', login_required(MyResumeEditView.as_view()), name='myresume'),
+    path('search', SearchView.as_view(), name='search')
 ]
 
 if settings.DEBUG:

@@ -65,15 +65,15 @@ class Application(models.Model):
 
 
 class Resume(models.Model):
-    name = models.CharField(max_length=20)
-    surname = models.CharField(max_length=40)
-    status = models.CharField(max_length=30)
-    salary = models.CharField(max_length=8)
-    specialty = models.CharField(max_length=64)
-    grade = models.CharField(max_length=64)
-    education = models.CharField(max_length=64)
-    experience = models.CharField(max_length=64)
-    portfolio = models.CharField(max_length=300)
+    name = models.CharField(max_length=20, verbose_name='Ваше имя')
+    surname = models.CharField(max_length=40, verbose_name='Ваша фамилия')
+    status = models.CharField(max_length=30, verbose_name='Ваш статус')
+    salary = models.CharField(max_length=8, verbose_name='Ваша желаемая зарплата')
+    specialty = models.CharField(max_length=64, verbose_name='Ваша специальность')
+    grade = models.CharField(max_length=64, verbose_name='Ваш уровень')
+    education = models.CharField(max_length=64, verbose_name='Ваше образование')
+    experience = models.CharField(max_length=64, verbose_name='Ваш опыт')
+    portfolio = models.CharField(max_length=300, verbose_name='Ваше портфолио')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resume_owner', null=True, blank=True)
 
     def __str__(self):
