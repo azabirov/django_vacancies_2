@@ -127,7 +127,6 @@ class MyCompanyEdit(View):
             companyform = CompanyForm(instance=company)
         return render(request, 'week3/company-edit.html', context={'form': companyform, 'company': company})
 
-
     def post(self, request):
         user = auth.get_user(request)
         messages.success(self.request, self.success_message)
@@ -267,7 +266,7 @@ class SearchView(ListView):
     def get_queryset(self):
         request = self.request.GET.get('s')
         return Vacancy.objects.filter(
-            Q(title__icontains=request) | Q(description__icontains=request) | Q(skills__icontains=request)
+            Q(title__icontains=request) | Q(description__icontains=request) | Q(skills__icontains=request),
         )
 
 

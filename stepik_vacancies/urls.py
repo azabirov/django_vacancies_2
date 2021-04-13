@@ -72,7 +72,7 @@ urlpatterns = [
     path('myresume/create', login_required(MyResumeCreateView.as_view()), name='myresumecreate'),
     path('myresume/edit', login_required(MyResumeEditView.as_view()), name='myresumeedit'),
     path('myresume', login_required(MyResumeEditView.as_view()), name='myresume'),
-    path('search', SearchView.as_view(), name='search')
+    path('search', SearchView.as_view(), name='search'),
 ]
 
 if settings.DEBUG:
