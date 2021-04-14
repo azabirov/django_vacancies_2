@@ -256,7 +256,7 @@ class RegisterView(CreateView):
         user = form.save(commit=False)
         user.set_password(form.cleaned_data['password'])
         user.save()
-        return redirect('/login/')
+        return redirect('login')
 
 
 class SearchView(ListView):

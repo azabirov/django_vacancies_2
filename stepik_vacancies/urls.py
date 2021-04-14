@@ -71,7 +71,7 @@ urlpatterns = [
     path('myresume/letsstart', login_required(MyResumeLetsStart.as_view()), name='resumeletsstart'),
     path('myresume/create', login_required(MyResumeCreateView.as_view()), name='myresumecreate'),
     path('myresume/edit', login_required(MyResumeEditView.as_view()), name='myresumeedit'),
-    path('myresume', login_required(MyResumeEditView.as_view()), name='myresume'),
+    path('myresume/', login_required(MyResumeEditView.as_view()), name='myresume'),
     path('search', SearchView.as_view(), name='search'),
 ]
 
