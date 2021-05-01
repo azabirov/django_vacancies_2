@@ -66,6 +66,7 @@ urlpatterns = [
     path('mycompany/edit/', login_required(MyCompanyEdit.as_view()), name='mycompanyedit'),
     path('mycompany/vacancies/', login_required(MyVacanciesView.as_view()), name='myvacancies'),
     path('mycompany/vacancies/create/', login_required(MyVacanciesCreateView.as_view()), name='myvacanciescreate'),
+    path('mycompany/vacancies/edit/<int:vacancy_>', login_required(MyVacancyEditView.as_view()), name='myvacancyedit'),
     path('mycompany/vacancies/edit/', login_required(MyVacancyEditView.as_view()), name='myvacancyedit'),
     path('mycompany/vacancies/<int:vacancy>/', login_required(MyVacancy.as_view()), name='myvacancy'),
     path('myresume/letsstart', login_required(MyResumeLetsStart.as_view()), name='resumeletsstart'),

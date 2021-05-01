@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
 from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, CreateView, ListView
 
 from job_app.forms import RegistrationForm, LoginForm, ApplicationForm, CompanyForm, VacancyForm, ResumeForm
@@ -159,18 +159,43 @@ class MyCompanyCreate(View):
 class MyVacancyEditView(View):
     success_message = "Вакансия обновлена"
 
-    def get(self, request):
-        vacancy_form = VacancyForm()
+    def get(self, request, vacancy_=0):
+        if vacancy_ != 0:
+            vacancy = Vacancy.objects.get(id=vacancy_)
+            vacancy_form = VacancyForm(instance=vacancy)
+        else:
+            vacancy_form = VacancyForm()
         return render(request, 'week4/vacancy-edit.html', context={'form': vacancy_form})
 
-    def post(self, request):
+    def post(self, request, vacancy_=0):
         messages.success(self.request, self.success_message)
-        vacancy_form = VacancyForm(request.POST)
-        company = Company.objects.filter(owner_id=request.user.id).first()
-        if vacancy_form.is_valid():
-            vacancy_form.instance.company = company
-            vacancy_form.save()
+        user = auth.get_user(request)
+        company = get_object_or_404(Company, owner=user)
+        if vacancy_ != 0:
+            vacancy = Vacancy.objects.get(id=vacancy_)
+            vacancy_form = VacancyForm(request.POST, instance=vacancy)
+            if vacancy_form.is_valid():
+                vacancy_form.save()
+        else:
+            vacancy_form = VacancyForm(request.POST)
+            if vacancy_form.is_valid():
+                title = vacancy_form.cleaned_data.get('title')
+                specialty = vacancy_form.cleaned_data.get('specialty')
+                salary_min = vacancy_form.cleaned_data.get('salary_min')
+                salary_max = vacancy_form.cleaned_data.get('salary_max')
+                skills = vacancy_form.cleaned_data.get('skills')
+                description = vacancy_form.cleaned_data.get('description')
+                Vacancy.objects.create(
+                    title=title,
+                    specialty=specialty,
+                    company=company,
+                    salary_min=salary_min,
+                    salary_max=salary_max,
+                    skills=skills,
+                    description=description,
+                )
             return render(request, 'week4/vacancy-edit.html', context={'form': vacancy_form})
+        return render(request, 'week4/vacancy-edit.html', context={'form': vacancy_form})
 
 
 class MyVacancy(View):
