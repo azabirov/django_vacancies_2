@@ -2,7 +2,7 @@
 import os
 import django
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'stepik_vacancies.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'django_vacancies.settings'
 django.setup()
 
 from data import jobs, companies, specialties
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 """
 import os
 import django
-os.environ['DJANGO_SETTINGS_MODULE'] = 'stepik_vacancies.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'django_vacancies.settings'
 django.setup()
 from django.contrib.auth.models import User
 from data import jobs, companies, specialties

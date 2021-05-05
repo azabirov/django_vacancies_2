@@ -1,5 +1,5 @@
 """
-WSGI config for stepik_vacancies project.
+WSGI config for django_vacancies project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stepik_vacancies.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_vacancies.settings')
 
 application = get_wsgi_application()
